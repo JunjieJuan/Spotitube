@@ -1,4 +1,4 @@
-package nl.han.aim.oose.dea.domain;
+package nl.han.aim.oose.dea.service;
 
 import nl.han.aim.oose.dea.datasource.dao.LoginDao;
 import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
