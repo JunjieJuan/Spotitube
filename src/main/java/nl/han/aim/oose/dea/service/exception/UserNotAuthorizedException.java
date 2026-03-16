@@ -1,0 +1,7 @@
+package nl.han.aim.oose.dea.service.exception;
+
+public class UserNotAuthorizedException extends RuntimeException {
+    public UserNotAuthorizedException (String message) {
+        super(message);
+    }
+}
