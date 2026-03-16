@@ -8,11 +8,11 @@ public class UserDTO {
 
     }
 
-    public void setUsername(String user){
+    public void setUser(String user){
         this.user = user;
     }
 
-    public String getUsername() {
+    public String getUser() {
         return user;
     }
 

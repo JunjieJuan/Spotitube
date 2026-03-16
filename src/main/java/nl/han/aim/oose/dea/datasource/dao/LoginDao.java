@@ -1,14 +1,15 @@
 package nl.han.aim.oose.dea.datasource.dao;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import nl.han.aim.oose.dea.datasource.databaseconnection.DatabaseProperties;
 import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
-import nl.han.aim.oose.dea.service.dto.UserDTO;
 
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@ApplicationScoped
 public class LoginDao {
     private Logger logger = Logger.getLogger(getClass().getName());
     private DatabaseProperties databaseProperties;
@@ -22,7 +23,7 @@ public class LoginDao {
 
     public LoginTokenDTO checkUser(String username, String password) {
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Class.forName(databaseProperties.getDriver());
             Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT * FROM users WHERE username = ? AND password = ?"
@@ -32,10 +33,10 @@ public class LoginDao {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                String fullName = resultSet.getString("name"); // volledige naam uit DB
+                String foundUsername = resultSet.getString("username");
                 statement.close();
                 connection.close();
-                return new LoginTokenDTO(fullName); // token wordt aangemaakt
+                return new LoginTokenDTO(foundUsername);
             }
 
             statement.close();
@@ -43,6 +44,6 @@ public class LoginDao {
         } catch (SQLException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, "Error communicating with database", e);
         }
-        return null; // geen gebruiker gevonden
+        return null;
     }
 }

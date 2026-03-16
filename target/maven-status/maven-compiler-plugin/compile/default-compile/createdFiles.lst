@@ -1,0 +1,17 @@
+nl\han\aim\oose\dea\service\LoginService.class
+nl\han\aim\oose\dea\Spotitube.class
+nl\han\aim\oose\dea\datasource\mapper\IMapper.class
+nl\han\aim\oose\dea\datasource\mapper\LoginResponseMapper.class
+nl\han\aim\oose\dea\resource\CorsFilter.class
+nl\han\aim\oose\dea\datasource\dao\LoginDao.class
+nl\han\aim\oose\dea\service\dto\UserDTO.class
+nl\han\aim\oose\dea\datasource\dao\TrackDao.class
+nl\han\aim\oose\dea\service\dto\PlaylistDTO.class
+nl\han\aim\oose\dea\service\dto\login\ItemDTO.class
+nl\han\aim\oose\dea\datasource\databaseconnection\DatabaseProperties.class
+nl\han\aim\oose\dea\datasource\databaseconnection\IDatabaseConnector.class
+nl\han\aim\oose\dea\resource\LoginResource.class
+nl\han\aim\oose\dea\service\exception\UserNotAuthorizedException.class
+nl\han\aim\oose\dea\service\dto\login\LoginTokenDTO.class
+nl\han\aim\oose\dea\datasource\databaseconnection\DatabaseConnector.class
+nl\han\aim\oose\dea\service\dto\TrackDTO.class

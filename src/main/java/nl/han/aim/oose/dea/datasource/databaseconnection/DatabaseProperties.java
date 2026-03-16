@@ -1,10 +1,13 @@
 package nl.han.aim.oose.dea.datasource.databaseconnection;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@ApplicationScoped
 public class DatabaseProperties {
     private Logger logger = Logger.getLogger(getClass().getName());
     private Properties properties;
@@ -21,5 +24,9 @@ public class DatabaseProperties {
     public String connectionString()
     {
         return properties.getProperty("connectionString");
+    }
+
+    public String getDriver() {
+        return properties.getProperty("driver");
     }
 }
