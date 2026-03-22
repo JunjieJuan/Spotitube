@@ -34,9 +34,22 @@ public class LoginDao {
 
             if (resultSet.next()) {
                 String foundUsername = resultSet.getString("username");
+
+                // Token aanmaken
+                LoginTokenDTO loginTokenDTO = new LoginTokenDTO(foundUsername);
+
+                // Token opslaan in de database
+                PreparedStatement updateStatement = connection.prepareStatement(
+                        "UPDATE users SET token = ? WHERE username = ?"
+                );
+                updateStatement.setString(1, loginTokenDTO.getToken());
+                updateStatement.setString(2, foundUsername);
+                updateStatement.executeUpdate();
+                updateStatement.close();
+
                 statement.close();
                 connection.close();
-                return new LoginTokenDTO(foundUsername);
+                return loginTokenDTO;
             }
 
             statement.close();

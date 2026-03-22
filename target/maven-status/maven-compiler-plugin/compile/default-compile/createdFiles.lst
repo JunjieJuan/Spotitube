@@ -12,6 +12,10 @@ nl\han\aim\oose\dea\datasource\databaseconnection\DatabaseProperties.class
 nl\han\aim\oose\dea\datasource\databaseconnection\IDatabaseConnector.class
 nl\han\aim\oose\dea\resource\LoginResource.class
 nl\han\aim\oose\dea\service\exception\UserNotAuthorizedException.class
+nl\han\aim\oose\dea\datasource\dao\PlaylistDao.class
 nl\han\aim\oose\dea\service\dto\login\LoginTokenDTO.class
 nl\han\aim\oose\dea\datasource\databaseconnection\DatabaseConnector.class
+nl\han\aim\oose\dea\resource\PlaylistResource.class
 nl\han\aim\oose\dea\service\dto\TrackDTO.class
+nl\han\aim\oose\dea\service\dto\PlaylistsResponseDTO.class
+nl\han\aim\oose\dea\service\PlaylistService.class
