@@ -5,6 +5,7 @@ public class TrackDTO {
     private String title;
     private String performer;
     private int duration;
+    private String url;
     private String album;
     private int playcount;
     private String publicationDate;
@@ -13,11 +14,12 @@ public class TrackDTO {
 
     public TrackDTO() {}
 
-    public TrackDTO(int id, String title, String performer, int duration, String album, int playcount, String publicationDate, String description, boolean offlineAvailable) {
+    public TrackDTO(int id, String title, String performer, int duration, String url, String album, int playcount, String publicationDate, String description, boolean offlineAvailable) {
         this.id = id;
         this.title = title;
         this.performer = performer;
         this.duration = duration;
+        this.url = url;
         this.album = album;
         this.playcount = playcount;
         this.publicationDate = publicationDate;
@@ -33,6 +35,8 @@ public class TrackDTO {
     public void setPerformer(String performer) { this.performer = performer; }
     public int getDuration() { return duration; }
     public void setDuration(int duration) { this.duration = duration; }
+    public String getUrl() { return url; }
+    public void setUrl(String url) { this.url = url; }
     public String getAlbum() { return album; }
     public void setAlbum(String album) { this.album = album; }
     public int getPlaycount() { return playcount; }

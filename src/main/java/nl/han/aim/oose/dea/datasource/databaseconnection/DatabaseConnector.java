@@ -1,5 +1,6 @@
 package nl.han.aim.oose.dea.datasource.databaseconnection;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
@@ -10,11 +11,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Default
+@ApplicationScoped
 public class DatabaseConnector implements IDatabaseConnector {
     private Logger logger = Logger.getLogger(getClass().getName());
     private DatabaseProperties databaseProperties;
-
-
 
     @Inject
     public void setDatabaseProperties(DatabaseProperties databaseProperties) {
@@ -24,9 +24,10 @@ public class DatabaseConnector implements IDatabaseConnector {
     @Override
     public Connection connect() {
         try {
+            Class.forName(databaseProperties.getDriver());
             return DriverManager.getConnection(databaseProperties.connectionString());
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Cant connect to the database " + e);
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Can't connect to the database", e);
         }
         return null;
     }

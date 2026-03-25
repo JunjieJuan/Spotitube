@@ -2,7 +2,8 @@ package nl.han.aim.oose.dea.datasource.dao;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import nl.han.aim.oose.dea.datasource.databaseconnection.DatabaseProperties;
+import nl.han.aim.oose.dea.datasource.databaseconnection.IDatabaseConnector;
+import nl.han.aim.oose.dea.datasource.mapper.LoginResponseMapper;
 import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
 
 import java.sql.*;
@@ -12,49 +13,40 @@ import java.util.logging.Logger;
 @ApplicationScoped
 public class LoginDao {
     private Logger logger = Logger.getLogger(getClass().getName());
-    private DatabaseProperties databaseProperties;
+    private IDatabaseConnector databaseConnector;
+    @Inject
+    private LoginResponseMapper loginResponseMapper;
 
     public LoginDao() {}
 
     @Inject
-    public void setDatabaseProperties(DatabaseProperties databaseProperties) {
-        this.databaseProperties = databaseProperties;
+    public void setDatabaseConnector(IDatabaseConnector databaseConnector) {
+        this.databaseConnector = databaseConnector;
     }
 
     public LoginTokenDTO checkUser(String username, String password) {
-        try {
-            Class.forName(databaseProperties.getDriver());
-            Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM users WHERE username = ? AND password = ?"
-            );
+        try (Connection connection = databaseConnector.connect();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT * FROM users WHERE username = ? AND password = ?"
+             )) {
             statement.setString(1, username);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                String foundUsername = resultSet.getString("username");
+                LoginTokenDTO loginTokenDTO = loginResponseMapper.mapToDTO(resultSet);
 
-                // Token aanmaken
-                LoginTokenDTO loginTokenDTO = new LoginTokenDTO(foundUsername);
-
-                // Token opslaan in de database
-                PreparedStatement updateStatement = connection.prepareStatement(
+                try (PreparedStatement updateStatement = connection.prepareStatement(
                         "UPDATE users SET token = ? WHERE username = ?"
-                );
-                updateStatement.setString(1, loginTokenDTO.getToken());
-                updateStatement.setString(2, foundUsername);
-                updateStatement.executeUpdate();
-                updateStatement.close();
+                )) {
+                    updateStatement.setString(1, loginTokenDTO.getToken());
+                    updateStatement.setString(2, loginTokenDTO.getUser());
+                    updateStatement.executeUpdate();
+                }
 
-                statement.close();
-                connection.close();
                 return loginTokenDTO;
             }
-
-            statement.close();
-            connection.close();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error communicating with database", e);
         }
         return null;

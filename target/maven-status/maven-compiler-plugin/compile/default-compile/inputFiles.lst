@@ -6,10 +6,12 @@ E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\datasource\databaseconnec
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\datasource\databaseconnection\IDatabaseConnector.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\datasource\mapper\IMapper.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\datasource\mapper\LoginResponseMapper.java
+E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\datasource\mapper\PlaylistMapper.java
+E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\datasource\mapper\TrackMapper.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\resource\CorsFilter.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\resource\LoginResource.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\resource\PlaylistResource.java
-E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\dto\login\ItemDTO.java
+E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\resource\TrackResource.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\dto\login\LoginTokenDTO.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\dto\PlaylistDTO.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\dto\PlaylistsResponseDTO.java
@@ -18,4 +20,5 @@ E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\dto\UserDTO.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\exception\UserNotAuthorizedException.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\LoginService.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\PlaylistService.java
+E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\TrackService.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\Spotitube.java

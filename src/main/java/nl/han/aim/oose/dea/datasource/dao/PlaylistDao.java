@@ -2,7 +2,8 @@ package nl.han.aim.oose.dea.datasource.dao;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import nl.han.aim.oose.dea.datasource.databaseconnection.DatabaseProperties;
+import nl.han.aim.oose.dea.datasource.databaseconnection.IDatabaseConnector;
+import nl.han.aim.oose.dea.datasource.mapper.PlaylistMapper;
 import nl.han.aim.oose.dea.service.dto.PlaylistDTO;
 import nl.han.aim.oose.dea.service.dto.PlaylistsResponseDTO;
 
@@ -14,65 +15,48 @@ import java.util.logging.Logger;
 @ApplicationScoped
 public class PlaylistDao {
     private Logger logger = Logger.getLogger(getClass().getName());
-    private DatabaseProperties databaseProperties;
+    private IDatabaseConnector databaseConnector;
+
+    @Inject
+    private PlaylistMapper playlistMapper;
 
     public PlaylistDao() {}
 
     @Inject
-    public void setDatabaseProperties(DatabaseProperties databaseProperties) {
-        this.databaseProperties = databaseProperties;
+    public void setDatabaseConnector(IDatabaseConnector databaseConnector) {
+        this.databaseConnector = databaseConnector;
     }
 
     public PlaylistsResponseDTO getAllPlaylists(String token) {
         ArrayList<PlaylistDTO> playlists = new ArrayList<>();
         int totalLength = 0;
 
-        try {
-            Class.forName(databaseProperties.getDriver());
-            Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
+        try (Connection connection = databaseConnector.connect()) {
+            int userId = getUserIdByToken(connection, token);
 
-            // Haal de user_id op via het token
-            PreparedStatement userStatement = connection.prepareStatement(
-                    "SELECT id FROM users WHERE token = ?"
-            );
-            userStatement.setString(1, token);
-            ResultSet userResult = userStatement.executeQuery();
-
-            if (userResult.next()) {
-                int userId = userResult.getInt("id");
-
-                // Haal alle playlists op
-                PreparedStatement statement = connection.prepareStatement(
-                        "SELECT * FROM playlist"
-                );
-                ResultSet resultSet = statement.executeQuery();
-
-                while (resultSet.next()) {
-                    int playlistId = resultSet.getInt("id");
-                    String name = resultSet.getString("name");
-                    boolean owner = resultSet.getInt("user_id") == userId;
-
-                    playlists.add(new PlaylistDTO(playlistId, name, owner));
+            try (PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM playlist"
+            )) {
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    PlaylistDTO playlist = playlistMapper.mapToDTO(rs);
+                    playlist.setOwner(rs.getInt("user_id") == userId);
+                    playlists.add(playlist);
                 }
-
-                // Bereken de totale lengte van alle tracks
-                PreparedStatement lengthStatement = connection.prepareStatement(
-                        "SELECT SUM(t.duration) as totalLength " +
-                                "FROM track t " +
-                                "JOIN playlist_track pt ON t.id = pt.track_id"
-                );
-                ResultSet lengthResult = lengthStatement.executeQuery();
-                if (lengthResult.next()) {
-                    totalLength = lengthResult.getInt("totalLength");
-                }
-
-                statement.close();
-                lengthStatement.close();
             }
 
-            userStatement.close();
-            connection.close();
-        } catch (SQLException | ClassNotFoundException e) {
+            try (PreparedStatement lengthStatement = connection.prepareStatement(
+                    "SELECT COALESCE(SUM(t.duration), 0) AS totalLength " +
+                            "FROM track t " +
+                            "JOIN playlist_track pt ON t.id = pt.track_id"
+            )) {
+                ResultSet rs = lengthStatement.executeQuery();
+                if (rs.next()) {
+                    totalLength = rs.getInt("totalLength");
+                }
+            }
+
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error communicating with database", e);
         }
 
@@ -80,71 +64,59 @@ public class PlaylistDao {
     }
 
     public PlaylistsResponseDTO addPlaylist(PlaylistDTO playlist, String token) {
-        try {
-            Class.forName(databaseProperties.getDriver());
-            Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
+        try (Connection connection = databaseConnector.connect()) {
+            int userId = getUserIdByToken(connection, token);
 
-            // Haal user_id op via token
-            PreparedStatement userStatement = connection.prepareStatement(
-                    "SELECT id FROM users WHERE token = ?"
-            );
-            userStatement.setString(1, token);
-            ResultSet userResult = userStatement.executeQuery();
-
-            if (userResult.next()) {
-                int userId = userResult.getInt("id");
-
-                PreparedStatement statement = connection.prepareStatement(
-                        "INSERT INTO playlist (name, user_id) VALUES (?, ?)"
-                );
+            try (PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO playlist (name, user_id) VALUES (?, ?)"
+            )) {
                 statement.setString(1, playlist.getName());
                 statement.setInt(2, userId);
                 statement.executeUpdate();
-                statement.close();
             }
-
-            userStatement.close();
-            connection.close();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error communicating with database", e);
         }
         return getAllPlaylists(token);
     }
 
     public PlaylistsResponseDTO deletePlaylist(int id, String token) {
-        try {
-            Class.forName(databaseProperties.getDriver());
-            Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
-
-            PreparedStatement statement = connection.prepareStatement(
-                    "DELETE FROM playlist WHERE id = ?"
-            );
+        try (Connection connection = databaseConnector.connect();
+             PreparedStatement statement = connection.prepareStatement(
+                     "DELETE FROM playlist WHERE id = ?"
+             )) {
             statement.setInt(1, id);
             statement.executeUpdate();
-            statement.close();
-            connection.close();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error communicating with database", e);
         }
         return getAllPlaylists(token);
     }
 
     public PlaylistsResponseDTO editPlaylist(int id, PlaylistDTO playlist, String token) {
-        try {
-            Class.forName(databaseProperties.getDriver());
-            Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
-
-            PreparedStatement statement = connection.prepareStatement(
-                    "UPDATE playlist SET name = ? WHERE id = ?"
-            );
+        try (Connection connection = databaseConnector.connect();
+             PreparedStatement statement = connection.prepareStatement(
+                     "UPDATE playlist SET name = ? WHERE id = ?"
+             )) {
             statement.setString(1, playlist.getName());
             statement.setInt(2, id);
             statement.executeUpdate();
-            statement.close();
-            connection.close();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error communicating with database", e);
         }
         return getAllPlaylists(token);
+    }
+
+    private int getUserIdByToken(Connection connection, String token) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT id FROM users WHERE token = ?"
+        )) {
+            statement.setString(1, token);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        }
+        return -1;
     }
 }
