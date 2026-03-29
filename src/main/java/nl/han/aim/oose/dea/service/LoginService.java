@@ -7,7 +7,7 @@ import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
 import nl.han.aim.oose.dea.service.dto.UserDTO;
 
 @ApplicationScoped
-public class LoginService {
+public class LoginService implements ILoginService{
 
     private LoginDao loginDao;
 

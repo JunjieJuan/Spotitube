@@ -18,6 +18,9 @@ E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\dto\PlaylistsResp
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\dto\TrackDTO.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\dto\UserDTO.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\exception\UserNotAuthorizedException.java
+E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\ILoginService.java
+E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\IPlaylistService.java
+E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\ITrackService.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\LoginService.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\PlaylistService.java
 E:\Han\DEA\Spotitube\src\main\java\nl\han\aim\oose\dea\service\TrackService.java

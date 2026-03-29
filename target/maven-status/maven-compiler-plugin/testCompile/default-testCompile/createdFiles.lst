@@ -1,2 +1,6 @@
-nl\han\aim\oose\dea\resource\LoginResourceTest.class
+nl\han\aim\oose\dea\service\PlaylistServiceTest.class
 nl\han\aim\oose\dea\service\LoginServiceTest.class
+nl\han\aim\oose\dea\service\TrackServiceTest.class
+nl\han\aim\oose\dea\resource\PlaylistResourceTest.class
+nl\han\aim\oose\dea\resource\LoginResourceTest.class
+nl\han\aim\oose\dea\resource\TrackResourceTest.class

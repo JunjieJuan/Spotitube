@@ -7,7 +7,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import nl.han.aim.oose.dea.service.LoginService;
+import nl.han.aim.oose.dea.service.ILoginService;
 import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
 import nl.han.aim.oose.dea.service.dto.UserDTO;
 import nl.han.aim.oose.dea.service.exception.UserNotAuthorizedException;
@@ -15,7 +15,7 @@ import nl.han.aim.oose.dea.service.exception.UserNotAuthorizedException;
 @Path("/login")
 public class LoginResource {
 
-    private LoginService loginService;
+    private ILoginService loginService;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -29,7 +29,7 @@ public class LoginResource {
     }
 
     @Inject
-    public void setLoginService(LoginService loginService) {
+    public void setLoginService(ILoginService loginService) {
         this.loginService = loginService;
     }
 

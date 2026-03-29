@@ -4,8 +4,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import nl.han.aim.oose.dea.service.PlaylistService;
-import nl.han.aim.oose.dea.service.TrackService;
+import nl.han.aim.oose.dea.service.IPlaylistService;
+import nl.han.aim.oose.dea.service.ITrackService;
 import nl.han.aim.oose.dea.service.dto.PlaylistDTO;
 import nl.han.aim.oose.dea.service.dto.PlaylistsResponseDTO;
 import nl.han.aim.oose.dea.service.dto.TrackDTO;
@@ -15,16 +15,16 @@ import java.util.ArrayList;
 @Path("/playlists")
 public class PlaylistResource {
 
-    private PlaylistService playlistService;
-    private TrackService trackService;
+    private IPlaylistService playlistService;
+    private ITrackService trackService;
 
     @Inject
-    public void setPlaylistService(PlaylistService playlistService) {
+    public void setPlaylistService(IPlaylistService playlistService) {
         this.playlistService = playlistService;
     }
 
     @Inject
-    public void setTrackService(TrackService trackService) {
+    public void setTrackService(ITrackService trackService) {
         this.trackService = trackService;
     }
 

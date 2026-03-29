@@ -1,5 +1,7 @@
 nl\han\aim\oose\dea\Spotitube.class
 nl\han\aim\oose\dea\datasource\mapper\IMapper.class
+nl\han\aim\oose\dea\service\IPlaylistService.class
+nl\han\aim\oose\dea\service\ITrackService.class
 nl\han\aim\oose\dea\datasource\databaseconnection\DatabaseProperties.class
 nl\han\aim\oose\dea\datasource\databaseconnection\IDatabaseConnector.class
 nl\han\aim\oose\dea\datasource\mapper\TrackMapper.class
@@ -21,6 +23,7 @@ nl\han\aim\oose\dea\service\dto\UserDTO.class
 nl\han\aim\oose\dea\datasource\dao\TrackDao.class
 nl\han\aim\oose\dea\service\dto\PlaylistDTO.class
 nl\han\aim\oose\dea\service\TrackService.class
+nl\han\aim\oose\dea\service\ILoginService.class
 nl\han\aim\oose\dea\service\exception\UserNotAuthorizedException.class
 nl\han\aim\oose\dea\datasource\dao\PlaylistDao.class
 nl\han\aim\oose\dea\datasource\databaseconnection\DatabaseConnector.class

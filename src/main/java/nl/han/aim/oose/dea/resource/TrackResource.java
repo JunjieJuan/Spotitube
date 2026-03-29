@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import nl.han.aim.oose.dea.service.ITrackService;
 import nl.han.aim.oose.dea.service.TrackService;
 import nl.han.aim.oose.dea.service.dto.TrackDTO;
 
@@ -12,10 +13,10 @@ import java.util.ArrayList;
 @Path("/tracks")
 public class TrackResource {
 
-    private TrackService trackService;
+    private ITrackService trackService;
 
     @Inject
-    public void setTrackService(TrackService trackService) {
+    public void setTrackService(ITrackService trackService) {
         this.trackService = trackService;
     }
 

@@ -7,7 +7,7 @@ import nl.han.aim.oose.dea.service.dto.PlaylistDTO;
 import nl.han.aim.oose.dea.service.dto.PlaylistsResponseDTO;
 
 @ApplicationScoped
-public class PlaylistService {
+public class PlaylistService implements IPlaylistService{
 
     private PlaylistDao playlistDao;
 

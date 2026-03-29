@@ -8,7 +8,7 @@ import nl.han.aim.oose.dea.service.dto.TrackDTO;
 import java.util.ArrayList;
 
 @ApplicationScoped
-public class TrackService {
+public class TrackService implements  ITrackService {
 
     private TrackDao trackDao;
 

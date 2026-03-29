@@ -1,7 +1,7 @@
 package nl.han.aim.oose.dea.resource;
 
 import jakarta.ws.rs.core.Response;
-import nl.han.aim.oose.dea.service.LoginService;
+import nl.han.aim.oose.dea.service.ILoginService;
 import nl.han.aim.oose.dea.service.dto.UserDTO;
 import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
 import nl.han.aim.oose.dea.service.exception.UserNotAuthorizedException;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 class LoginResourceTest {
 
     @Mock
-    private LoginService loginService;
+    private ILoginService loginService;
 
     @InjectMocks
     private LoginResource loginResource;
