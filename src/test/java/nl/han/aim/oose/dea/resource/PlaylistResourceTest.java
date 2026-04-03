@@ -5,6 +5,7 @@ import nl.han.aim.oose.dea.service.IPlaylistService;
 import nl.han.aim.oose.dea.service.ITrackService;
 import nl.han.aim.oose.dea.service.dto.PlaylistDTO;
 import nl.han.aim.oose.dea.service.dto.PlaylistsResponseDTO;
+import nl.han.aim.oose.dea.service.dto.TrackDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -85,5 +86,64 @@ class PlaylistResourceTest {
 
         // Assert
         assertEquals(200, result.getStatus());
+    }
+
+    @Test
+    void testAddTrackToPlaylistGeeft201Terug() {
+        // Arrange
+        int playlistId = 1;
+        String token = "test-token";
+        TrackDTO track = new TrackDTO();
+        ArrayList<TrackDTO> tracks = new ArrayList<>();
+        tracks.add(track);
+        when(trackService.addTrackToPlaylist(playlistId, track)).thenReturn(tracks);
+
+        // Act
+        Response result = playlistResource.addTrackToPlaylist(playlistId, token, track);
+
+        // Assert
+        assertEquals(201, result.getStatus());
+        PlaylistResource.TracksResponse body = (PlaylistResource.TracksResponse) result.getEntity();
+        assertNotNull(body);
+        assertEquals(1, body.getTracks().size());
+    }
+
+    @Test
+    void testRemoveTrackFromPlaylistGeeft200Terug() {
+        // Arrange
+        int playlistId = 1;
+        int trackId = 1;
+        String token = "test-token";
+        ArrayList<TrackDTO> tracks = new ArrayList<>();
+        tracks.add(new TrackDTO());
+        when(trackService.removeTrackFromPlaylist(playlistId, trackId)).thenReturn(tracks);
+
+        // Act
+        Response result = playlistResource.removeTrackFromPlaylist(playlistId, trackId, token);
+
+        // Assert
+        assertEquals(200, result.getStatus());
+        PlaylistResource.TracksResponse body = (PlaylistResource.TracksResponse) result.getEntity();
+        assertNotNull(body);
+        assertEquals(1, body.getTracks().size());
+    }
+
+    @Test
+    void testGetTracksForPlaylistGeeft200Terug() {
+        // Arrange
+        int playlistId = 1;
+        String token = "test-token";
+        ArrayList<TrackDTO> tracks = new ArrayList<>();
+        tracks.add(new TrackDTO());
+        when(trackService.getTracksForPlaylist(playlistId)).thenReturn(tracks);
+
+        // Act
+        Response result = playlistResource.getTracksForPlaylist(playlistId, token);
+
+        // Assert
+        assertEquals(200, result.getStatus());
+        PlaylistResource.TracksResponse body = (PlaylistResource.TracksResponse) result.getEntity();
+        assertNotNull(body);
+        assertEquals(1, body.getTracks().size());
     }
 }
