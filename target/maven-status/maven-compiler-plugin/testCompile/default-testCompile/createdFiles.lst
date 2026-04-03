@@ -1,6 +1,13 @@
 nl\han\aim\oose\dea\service\PlaylistServiceTest.class
 nl\han\aim\oose\dea\service\LoginServiceTest.class
 nl\han\aim\oose\dea\service\TrackServiceTest.class
+nl\han\aim\oose\dea\datasource\databaseconnection\DatabasePropertiesTest.class
 nl\han\aim\oose\dea\resource\PlaylistResourceTest.class
+nl\han\aim\oose\dea\datasource\mapper\LoginResponseMapperTest.class
+nl\han\aim\oose\dea\datasource\mapper\TrackMapperTest.class
+nl\han\aim\oose\dea\datasource\dao\TrackDaoTest.class
+nl\han\aim\oose\dea\datasource\dao\LoginDaoTest.class
+nl\han\aim\oose\dea\datasource\dao\PlaylistDaoTest.class
 nl\han\aim\oose\dea\resource\LoginResourceTest.class
 nl\han\aim\oose\dea\resource\TrackResourceTest.class
+nl\han\aim\oose\dea\datasource\mapper\PlaylistMapperTest.class

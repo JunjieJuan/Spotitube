@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlaylistDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spotitube</a> &gt; <a href="index.source.html" class="el_package">nl.han.aim.oose.dea.datasource.dao</a> &gt; <span class="el_source">PlaylistDao.java</span></div><h1>PlaylistDao.java</h1><pre class="source lang-java linenums">package nl.han.aim.oose.dea.datasource.dao;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import nl.han.aim.oose.dea.datasource.databaseconnection.IDatabaseConnector;
+import nl.han.aim.oose.dea.datasource.mapper.PlaylistMapper;
+import nl.han.aim.oose.dea.service.dto.PlaylistDTO;
+import nl.han.aim.oose.dea.service.dto.PlaylistsResponseDTO;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+@ApplicationScoped
+public class PlaylistDao {
+<span class="fc" id="L17">    private Logger logger = Logger.getLogger(getClass().getName());</span>
+    private IDatabaseConnector databaseConnector;
+
+    @Inject
+    private PlaylistMapper playlistMapper;
+
+<span class="fc" id="L23">    public PlaylistDao() {}</span>
+
+    @Inject
+    public void setDatabaseConnector(IDatabaseConnector databaseConnector) {
+<span class="fc" id="L27">        this.databaseConnector = databaseConnector;</span>
+<span class="fc" id="L28">    }</span>
+
+    public void setPlaylistMapper(PlaylistMapper playlistMapper) {
+<span class="fc" id="L31">        this.playlistMapper = playlistMapper;</span>
+<span class="fc" id="L32">    }</span>
+
+    public PlaylistsResponseDTO getAllPlaylists(String token) {
+<span class="fc" id="L35">        ArrayList&lt;PlaylistDTO&gt; playlists = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L36">        int totalLength = 0;</span>
+
+<span class="fc" id="L38">        try (Connection connection = databaseConnector.connect()) {</span>
+<span class="fc" id="L39">            int userId = getUserIdByToken(connection, token);</span>
+
+<span class="fc" id="L41">            try (PreparedStatement statement = connection.prepareStatement(</span>
+                    &quot;SELECT * FROM playlist&quot;
+            )) {
+<span class="fc" id="L44">                ResultSet rs = statement.executeQuery();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">                while (rs.next()) {</span>
+<span class="fc" id="L46">                    PlaylistDTO playlist = playlistMapper.mapToDTO(rs);</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">                    playlist.setOwner(rs.getInt(&quot;user_id&quot;) == userId);</span>
+<span class="fc" id="L48">                    playlists.add(playlist);</span>
+<span class="fc" id="L49">                }</span>
+            }
+
+<span class="fc" id="L52">            try (PreparedStatement lengthStatement = connection.prepareStatement(</span>
+                    &quot;SELECT COALESCE(SUM(t.duration), 0) AS totalLength &quot; +
+                            &quot;FROM track t &quot; +
+                            &quot;JOIN playlist_track pt ON t.id = pt.track_id&quot;
+            )) {
+<span class="fc" id="L57">                ResultSet rs = lengthStatement.executeQuery();</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">                if (rs.next()) {</span>
+<span class="fc" id="L59">                    totalLength = rs.getInt(&quot;totalLength&quot;);</span>
+                }
+            }
+
+<span class="fc" id="L63">        } catch (SQLException e) {</span>
+<span class="fc" id="L64">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="fc" id="L65">        }</span>
+
+<span class="fc" id="L67">        return new PlaylistsResponseDTO(playlists, totalLength);</span>
+    }
+
+    public PlaylistsResponseDTO addPlaylist(PlaylistDTO playlist, String token) {
+<span class="fc" id="L71">        try (Connection connection = databaseConnector.connect()) {</span>
+<span class="fc" id="L72">            int userId = getUserIdByToken(connection, token);</span>
+
+<span class="fc" id="L74">            try (PreparedStatement statement = connection.prepareStatement(</span>
+                    &quot;INSERT INTO playlist (name, user_id) VALUES (?, ?)&quot;
+            )) {
+<span class="fc" id="L77">                statement.setString(1, playlist.getName());</span>
+<span class="fc" id="L78">                statement.setInt(2, userId);</span>
+<span class="fc" id="L79">                statement.executeUpdate();</span>
+            }
+<span class="nc" id="L81">        } catch (SQLException e) {</span>
+<span class="nc" id="L82">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="fc" id="L83">        }</span>
+<span class="fc" id="L84">        return getAllPlaylists(token);</span>
+    }
+
+    public PlaylistsResponseDTO deletePlaylist(int id, String token) {
+<span class="fc" id="L88">        try (Connection connection = databaseConnector.connect();</span>
+<span class="fc" id="L89">             PreparedStatement statement = connection.prepareStatement(</span>
+                     &quot;DELETE FROM playlist WHERE id = ?&quot;
+             )) {
+<span class="fc" id="L92">            statement.setInt(1, id);</span>
+<span class="fc" id="L93">            statement.executeUpdate();</span>
+<span class="nc" id="L94">        } catch (SQLException e) {</span>
+<span class="nc" id="L95">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="fc" id="L96">        }</span>
+<span class="fc" id="L97">        return getAllPlaylists(token);</span>
+    }
+
+    public PlaylistsResponseDTO editPlaylist(int id, PlaylistDTO playlist, String token) {
+<span class="fc" id="L101">        try (Connection connection = databaseConnector.connect();</span>
+<span class="fc" id="L102">             PreparedStatement statement = connection.prepareStatement(</span>
+                     &quot;UPDATE playlist SET name = ? WHERE id = ?&quot;
+             )) {
+<span class="fc" id="L105">            statement.setString(1, playlist.getName());</span>
+<span class="fc" id="L106">            statement.setInt(2, id);</span>
+<span class="fc" id="L107">            statement.executeUpdate();</span>
+<span class="nc" id="L108">        } catch (SQLException e) {</span>
+<span class="nc" id="L109">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="fc" id="L110">        }</span>
+<span class="fc" id="L111">        return getAllPlaylists(token);</span>
+    }
+
+    private int getUserIdByToken(Connection connection, String token) throws SQLException {
+<span class="fc" id="L115">        try (PreparedStatement statement = connection.prepareStatement(</span>
+                &quot;SELECT id FROM users WHERE token = ?&quot;
+        )) {
+<span class="fc" id="L118">            statement.setString(1, token);</span>
+<span class="fc" id="L119">            ResultSet rs = statement.executeQuery();</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">            if (rs.next()) {</span>
+<span class="fc" id="L121">                return rs.getInt(&quot;id&quot;);</span>
+            }
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        }</span>
+<span class="nc" id="L124">        return -1;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

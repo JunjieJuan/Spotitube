@@ -2,7 +2,7 @@ package nl.han.aim.oose.dea.service;
 
 import nl.han.aim.oose.dea.datasource.dao.LoginDao;
 import nl.han.aim.oose.dea.service.dto.UserDTO;
-import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
+import nl.han.aim.oose.dea.service.dto.LoginTokenDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

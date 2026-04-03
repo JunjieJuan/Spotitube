@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrackDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spotitube</a> &gt; <a href="index.source.html" class="el_package">nl.han.aim.oose.dea.service.dto</a> &gt; <span class="el_source">TrackDTO.java</span></div><h1>TrackDTO.java</h1><pre class="source lang-java linenums">package nl.han.aim.oose.dea.service.dto;
+
+public class TrackDTO {
+    private int id;
+    private String title;
+    private String performer;
+    private int duration;
+    private String url;
+    private String album;
+    private int playcount;
+    private String publicationDate;
+    private String description;
+    private boolean offlineAvailable;
+
+<span class="fc" id="L15">    public TrackDTO() {}</span>
+
+<span class="fc" id="L17">    public TrackDTO(int id, String title, String performer, int duration, String url, String album, int playcount, String publicationDate, String description, boolean offlineAvailable) {</span>
+<span class="fc" id="L18">        this.id = id;</span>
+<span class="fc" id="L19">        this.title = title;</span>
+<span class="fc" id="L20">        this.performer = performer;</span>
+<span class="fc" id="L21">        this.duration = duration;</span>
+<span class="fc" id="L22">        this.url = url;</span>
+<span class="fc" id="L23">        this.album = album;</span>
+<span class="fc" id="L24">        this.playcount = playcount;</span>
+<span class="fc" id="L25">        this.publicationDate = publicationDate;</span>
+<span class="fc" id="L26">        this.description = description;</span>
+<span class="fc" id="L27">        this.offlineAvailable = offlineAvailable;</span>
+<span class="fc" id="L28">    }</span>
+
+<span class="fc" id="L30">    public int getId() { return id; }</span>
+<span class="nc" id="L31">    public void setId(int id) { this.id = id; }</span>
+<span class="fc" id="L32">    public String getTitle() { return title; }</span>
+<span class="nc" id="L33">    public void setTitle(String title) { this.title = title; }</span>
+<span class="fc" id="L34">    public String getPerformer() { return performer; }</span>
+<span class="nc" id="L35">    public void setPerformer(String performer) { this.performer = performer; }</span>
+<span class="fc" id="L36">    public int getDuration() { return duration; }</span>
+<span class="nc" id="L37">    public void setDuration(int duration) { this.duration = duration; }</span>
+<span class="fc" id="L38">    public String getUrl() { return url; }</span>
+<span class="nc" id="L39">    public void setUrl(String url) { this.url = url; }</span>
+<span class="fc" id="L40">    public String getAlbum() { return album; }</span>
+<span class="nc" id="L41">    public void setAlbum(String album) { this.album = album; }</span>
+<span class="fc" id="L42">    public int getPlaycount() { return playcount; }</span>
+<span class="nc" id="L43">    public void setPlaycount(int playcount) { this.playcount = playcount; }</span>
+<span class="fc" id="L44">    public String getPublicationDate() { return publicationDate; }</span>
+<span class="nc" id="L45">    public void setPublicationDate(String publicationDate) { this.publicationDate = publicationDate; }</span>
+<span class="fc" id="L46">    public String getDescription() { return description; }</span>
+<span class="nc" id="L47">    public void setDescription(String description) { this.description = description; }</span>
+<span class="fc" id="L48">    public boolean isOfflineAvailable() { return offlineAvailable; }</span>
+<span class="nc" id="L49">    public void setOfflineAvailable(boolean offlineAvailable) { this.offlineAvailable = offlineAvailable; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

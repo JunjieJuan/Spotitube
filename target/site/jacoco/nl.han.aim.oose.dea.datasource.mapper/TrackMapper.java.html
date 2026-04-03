@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrackMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spotitube</a> &gt; <a href="index.source.html" class="el_package">nl.han.aim.oose.dea.datasource.mapper</a> &gt; <span class="el_source">TrackMapper.java</span></div><h1>TrackMapper.java</h1><pre class="source lang-java linenums">package nl.han.aim.oose.dea.datasource.mapper;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import nl.han.aim.oose.dea.service.dto.TrackDTO;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+@ApplicationScoped
+<span class="fc" id="L10">public class TrackMapper implements IMapper&lt;TrackDTO&gt; {</span>
+    @Override
+    public TrackDTO mapToDTO(ResultSet rs) throws SQLException {
+<span class="fc" id="L13">        boolean offlineAvailable = false;</span>
+        try {
+<span class="fc" id="L15">            offlineAvailable = rs.getBoolean(&quot;offlineAvailable&quot;);</span>
+<span class="fc" id="L16">        } catch (SQLException e) {</span>
+            // standaard false
+<span class="fc" id="L18">        }</span>
+<span class="fc" id="L19">        return new TrackDTO(</span>
+<span class="fc" id="L20">                rs.getInt(&quot;id&quot;),</span>
+<span class="fc" id="L21">                rs.getString(&quot;title&quot;),</span>
+<span class="fc" id="L22">                rs.getString(&quot;performer&quot;),</span>
+<span class="fc" id="L23">                rs.getInt(&quot;duration&quot;),</span>
+<span class="fc" id="L24">                rs.getString(&quot;url&quot;),</span>
+<span class="fc" id="L25">                rs.getString(&quot;album&quot;),</span>
+<span class="fc" id="L26">                rs.getInt(&quot;playcount&quot;),</span>
+<span class="fc" id="L27">                rs.getString(&quot;publicationDate&quot;),</span>
+<span class="fc" id="L28">                rs.getString(&quot;description&quot;),</span>
+                offlineAvailable
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

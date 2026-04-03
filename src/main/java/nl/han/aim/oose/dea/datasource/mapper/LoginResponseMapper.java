@@ -1,7 +1,7 @@
 package nl.han.aim.oose.dea.datasource.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
+import nl.han.aim.oose.dea.service.dto.LoginTokenDTO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

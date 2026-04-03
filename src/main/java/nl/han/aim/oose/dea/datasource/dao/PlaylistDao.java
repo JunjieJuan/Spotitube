@@ -27,6 +27,10 @@ public class PlaylistDao {
         this.databaseConnector = databaseConnector;
     }
 
+    public void setPlaylistMapper(PlaylistMapper playlistMapper) {
+        this.playlistMapper = playlistMapper;
+    }
+
     public PlaylistsResponseDTO getAllPlaylists(String token) {
         ArrayList<PlaylistDTO> playlists = new ArrayList<>();
         int totalLength = 0;

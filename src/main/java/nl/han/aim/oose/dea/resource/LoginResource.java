@@ -8,7 +8,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import nl.han.aim.oose.dea.service.ILoginService;
-import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
+import nl.han.aim.oose.dea.service.dto.LoginTokenDTO;
 import nl.han.aim.oose.dea.service.dto.UserDTO;
 import nl.han.aim.oose.dea.service.exception.UserNotAuthorizedException;
 

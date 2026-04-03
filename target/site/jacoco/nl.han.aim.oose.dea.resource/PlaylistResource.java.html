@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlaylistResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spotitube</a> &gt; <a href="index.source.html" class="el_package">nl.han.aim.oose.dea.resource</a> &gt; <span class="el_source">PlaylistResource.java</span></div><h1>PlaylistResource.java</h1><pre class="source lang-java linenums">package nl.han.aim.oose.dea.resource;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import nl.han.aim.oose.dea.service.IPlaylistService;
+import nl.han.aim.oose.dea.service.ITrackService;
+import nl.han.aim.oose.dea.service.dto.PlaylistDTO;
+import nl.han.aim.oose.dea.service.dto.PlaylistsResponseDTO;
+import nl.han.aim.oose.dea.service.dto.TrackDTO;
+
+import java.util.ArrayList;
+
+@Path(&quot;/playlists&quot;)
+<span class="fc" id="L16">public class PlaylistResource {</span>
+
+    private IPlaylistService playlistService;
+    private ITrackService trackService;
+
+    @Inject
+    public void setPlaylistService(IPlaylistService playlistService) {
+<span class="fc" id="L23">        this.playlistService = playlistService;</span>
+<span class="fc" id="L24">    }</span>
+
+    @Inject
+    public void setTrackService(ITrackService trackService) {
+<span class="fc" id="L28">        this.trackService = trackService;</span>
+<span class="fc" id="L29">    }</span>
+
+    public static class TracksResponse {
+        private ArrayList&lt;TrackDTO&gt; tracks;
+
+<span class="nc" id="L34">        public TracksResponse(ArrayList&lt;TrackDTO&gt; tracks) {</span>
+<span class="nc" id="L35">            this.tracks = tracks;</span>
+<span class="nc" id="L36">        }</span>
+
+        public ArrayList&lt;TrackDTO&gt; getTracks() {
+<span class="nc" id="L39">            return tracks;</span>
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllPlaylists(@QueryParam(&quot;token&quot;) String token) {
+<span class="fc" id="L46">        PlaylistsResponseDTO playlists = playlistService.getAllPlaylists(token);</span>
+<span class="fc" id="L47">        return Response.ok(playlists).build();</span>
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addPlaylist(@QueryParam(&quot;token&quot;) String token, PlaylistDTO playlist) {
+<span class="fc" id="L54">        PlaylistsResponseDTO playlists = playlistService.addPlaylist(playlist, token);</span>
+<span class="fc" id="L55">        return Response.status(201).entity(playlists).build();</span>
+    }
+
+    @DELETE
+    @Path(&quot;/{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletePlaylist(@PathParam(&quot;id&quot;) int id, @QueryParam(&quot;token&quot;) String token) {
+<span class="fc" id="L62">        PlaylistsResponseDTO playlists = playlistService.deletePlaylist(id, token);</span>
+<span class="fc" id="L63">        return Response.ok(playlists).build();</span>
+    }
+
+    @PUT
+    @Path(&quot;/{id}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPlaylist(@PathParam(&quot;id&quot;) int id, @QueryParam(&quot;token&quot;) String token, PlaylistDTO playlist) {
+<span class="fc" id="L71">        PlaylistsResponseDTO playlists = playlistService.editPlaylist(id, playlist, token);</span>
+<span class="fc" id="L72">        return Response.ok(playlists).build();</span>
+    }
+
+    @GET
+    @Path(&quot;/{id}/tracks&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTracksForPlaylist(@PathParam(&quot;id&quot;) int playlistId,
+                                         @QueryParam(&quot;token&quot;) String token) {
+<span class="nc" id="L80">        ArrayList&lt;TrackDTO&gt; tracks = trackService.getTracksForPlaylist(playlistId);</span>
+<span class="nc" id="L81">        return Response.ok().entity(new TracksResponse(tracks)).build();</span>
+    }
+
+    @POST
+    @Path(&quot;/{id}/tracks&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addTrackToPlaylist(@PathParam(&quot;id&quot;) int playlistId,
+                                       @QueryParam(&quot;token&quot;) String token,
+                                       TrackDTO track) {
+<span class="nc" id="L91">        ArrayList&lt;TrackDTO&gt; tracks = trackService.addTrackToPlaylist(playlistId, track);</span>
+<span class="nc" id="L92">        return Response.status(201).entity(new TracksResponse(tracks)).build();</span>
+    }
+
+    @DELETE
+    @Path(&quot;/{id}/tracks/{trackId}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response removeTrackFromPlaylist(@PathParam(&quot;id&quot;) int playlistId,
+                                            @PathParam(&quot;trackId&quot;) int trackId,
+                                            @QueryParam(&quot;token&quot;) String token) {
+<span class="nc" id="L101">        ArrayList&lt;TrackDTO&gt; tracks = trackService.removeTrackFromPlaylist(playlistId, trackId);</span>
+<span class="nc" id="L102">        return Response.ok().entity(new TracksResponse(tracks)).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

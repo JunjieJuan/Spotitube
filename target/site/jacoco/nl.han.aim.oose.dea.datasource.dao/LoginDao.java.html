@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spotitube</a> &gt; <a href="index.source.html" class="el_package">nl.han.aim.oose.dea.datasource.dao</a> &gt; <span class="el_source">LoginDao.java</span></div><h1>LoginDao.java</h1><pre class="source lang-java linenums">package nl.han.aim.oose.dea.datasource.dao;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import nl.han.aim.oose.dea.datasource.databaseconnection.IDatabaseConnector;
+import nl.han.aim.oose.dea.datasource.mapper.LoginResponseMapper;
+import nl.han.aim.oose.dea.service.dto.LoginTokenDTO;
+
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+@ApplicationScoped
+public class LoginDao {
+<span class="fc" id="L15">    private Logger logger = Logger.getLogger(getClass().getName());</span>
+    private IDatabaseConnector databaseConnector;
+    @Inject
+    LoginResponseMapper loginResponseMapper;
+
+<span class="fc" id="L20">    public LoginDao() {}</span>
+
+    @Inject
+    public void setDatabaseConnector(IDatabaseConnector databaseConnector) {
+<span class="fc" id="L24">        this.databaseConnector = databaseConnector;</span>
+<span class="fc" id="L25">    }</span>
+
+    public void setLoginResponseMapper(LoginResponseMapper loginResponseMapper) {
+<span class="fc" id="L28">        this.loginResponseMapper = loginResponseMapper;</span>
+<span class="fc" id="L29">    }</span>
+
+    public LoginTokenDTO checkUser(String username, String password) {
+<span class="fc" id="L32">        try (Connection connection = databaseConnector.connect();</span>
+<span class="fc" id="L33">             PreparedStatement statement = connection.prepareStatement(</span>
+                     &quot;SELECT * FROM users WHERE username = ? AND password = ?&quot;
+             )) {
+<span class="fc" id="L36">            statement.setString(1, username);</span>
+<span class="fc" id="L37">            statement.setString(2, password);</span>
+<span class="fc" id="L38">            ResultSet resultSet = statement.executeQuery();</span>
+
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            if (resultSet.next()) {</span>
+<span class="fc" id="L41">                LoginTokenDTO loginTokenDTO = loginResponseMapper.mapToDTO(resultSet);</span>
+
+<span class="fc" id="L43">                try (PreparedStatement updateStatement = connection.prepareStatement(</span>
+                        &quot;UPDATE users SET token = ? WHERE username = ?&quot;
+                )) {
+<span class="fc" id="L46">                    updateStatement.setString(1, loginTokenDTO.getToken());</span>
+<span class="fc" id="L47">                    updateStatement.setString(2, loginTokenDTO.getUser());</span>
+<span class="fc" id="L48">                    updateStatement.executeUpdate();</span>
+                }
+
+<span class="fc" id="L51">                return loginTokenDTO;</span>
+            }
+<span class="pc bpc" id="L53" title="2 of 4 branches missed.">        } catch (SQLException e) {</span>
+<span class="fc" id="L54">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="fc" id="L55">        }</span>
+<span class="fc" id="L56">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

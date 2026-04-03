@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrackDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spotitube</a> &gt; <a href="index.source.html" class="el_package">nl.han.aim.oose.dea.datasource.dao</a> &gt; <span class="el_source">TrackDao.java</span></div><h1>TrackDao.java</h1><pre class="source lang-java linenums">package nl.han.aim.oose.dea.datasource.dao;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import nl.han.aim.oose.dea.datasource.databaseconnection.IDatabaseConnector;
+import nl.han.aim.oose.dea.datasource.mapper.TrackMapper;
+import nl.han.aim.oose.dea.service.dto.TrackDTO;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+@ApplicationScoped
+public class TrackDao {
+<span class="fc" id="L16">    private Logger logger = Logger.getLogger(getClass().getName());</span>
+    private IDatabaseConnector databaseConnector;
+
+    @Inject
+    private TrackMapper trackMapper;
+
+<span class="fc" id="L22">    public TrackDao() {}</span>
+
+    @Inject
+    public void setDatabaseConnector(IDatabaseConnector databaseConnector) {
+<span class="fc" id="L26">        this.databaseConnector = databaseConnector;</span>
+<span class="fc" id="L27">    }</span>
+
+    public void setTrackMapper(TrackMapper trackMapper) {
+<span class="fc" id="L30">        this.trackMapper = trackMapper;</span>
+<span class="fc" id="L31">    }</span>
+
+    public ArrayList&lt;TrackDTO&gt; getTracksForPlaylist(int playlistId) {
+<span class="fc" id="L34">        ArrayList&lt;TrackDTO&gt; tracks = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L35">        try (Connection connection = databaseConnector.connect();</span>
+<span class="fc" id="L36">             PreparedStatement statement = connection.prepareStatement(</span>
+                     &quot;SELECT t.*, pt.offlineAvailable FROM track t &quot; +
+                             &quot;JOIN playlist_track pt ON t.id = pt.track_id &quot; +
+                             &quot;WHERE pt.playlist_id = ?&quot;
+             )) {
+<span class="fc" id="L41">            statement.setInt(1, playlistId);</span>
+<span class="fc" id="L42">            ResultSet rs = statement.executeQuery();</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L44">                tracks.add(trackMapper.mapToDTO(rs));</span>
+            }
+<span class="fc" id="L46">        } catch (SQLException e) {</span>
+<span class="fc" id="L47">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="fc" id="L48">        }</span>
+<span class="fc" id="L49">        return tracks;</span>
+    }
+
+    public ArrayList&lt;TrackDTO&gt; getAvailableTracks(int playlistId) {
+<span class="fc" id="L53">        ArrayList&lt;TrackDTO&gt; tracks = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L54">        try (Connection connection = databaseConnector.connect();</span>
+<span class="fc" id="L55">             PreparedStatement statement = connection.prepareStatement(</span>
+                     &quot;SELECT t.*, false AS offlineAvailable FROM track t WHERE id NOT IN &quot; +
+                             &quot;(SELECT track_id FROM playlist_track WHERE playlist_id = ?)&quot;
+             )) {
+<span class="fc" id="L59">            statement.setInt(1, playlistId);</span>
+<span class="fc" id="L60">            ResultSet rs = statement.executeQuery();</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L62">                tracks.add(trackMapper.mapToDTO(rs));</span>
+            }
+<span class="nc" id="L64">        } catch (SQLException e) {</span>
+<span class="nc" id="L65">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="fc" id="L66">        }</span>
+<span class="fc" id="L67">        return tracks;</span>
+    }
+
+    public ArrayList&lt;TrackDTO&gt; addTrackToPlaylist(int playlistId, TrackDTO track) {
+<span class="fc" id="L71">        try (Connection connection = databaseConnector.connect();</span>
+<span class="fc" id="L72">             PreparedStatement statement = connection.prepareStatement(</span>
+                     &quot;INSERT INTO playlist_track (playlist_id, track_id, offlineAvailable) VALUES (?, ?, ?)&quot;
+             )) {
+<span class="fc" id="L75">            statement.setInt(1, playlistId);</span>
+<span class="fc" id="L76">            statement.setInt(2, track.getId());</span>
+<span class="fc" id="L77">            statement.setBoolean(3, track.isOfflineAvailable());</span>
+<span class="fc" id="L78">            statement.executeUpdate();</span>
+<span class="nc" id="L79">        } catch (SQLException e) {</span>
+<span class="nc" id="L80">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="fc" id="L81">        }</span>
+<span class="fc" id="L82">        return getTracksForPlaylist(playlistId);</span>
+    }
+
+    public ArrayList&lt;TrackDTO&gt; removeTrackFromPlaylist(int playlistId, int trackId) {
+<span class="fc" id="L86">        try (Connection connection = databaseConnector.connect();</span>
+<span class="fc" id="L87">             PreparedStatement statement = connection.prepareStatement(</span>
+                     &quot;DELETE FROM playlist_track WHERE playlist_id = ? AND track_id = ?&quot;
+             )) {
+<span class="fc" id="L90">            statement.setInt(1, playlistId);</span>
+<span class="fc" id="L91">            statement.setInt(2, trackId);</span>
+<span class="fc" id="L92">            statement.executeUpdate();</span>
+<span class="nc" id="L93">        } catch (SQLException e) {</span>
+<span class="nc" id="L94">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="fc" id="L95">        }</span>
+<span class="fc" id="L96">        return getTracksForPlaylist(playlistId);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

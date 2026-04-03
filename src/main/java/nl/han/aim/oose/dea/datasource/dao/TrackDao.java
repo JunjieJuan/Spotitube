@@ -26,6 +26,10 @@ public class TrackDao {
         this.databaseConnector = databaseConnector;
     }
 
+    public void setTrackMapper(TrackMapper trackMapper) {
+        this.trackMapper = trackMapper;
+    }
+
     public ArrayList<TrackDTO> getTracksForPlaylist(int playlistId) {
         ArrayList<TrackDTO> tracks = new ArrayList<>();
         try (Connection connection = databaseConnector.connect();

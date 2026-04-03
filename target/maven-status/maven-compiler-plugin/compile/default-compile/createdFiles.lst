@@ -7,8 +7,8 @@ nl\han\aim\oose\dea\datasource\databaseconnection\IDatabaseConnector.class
 nl\han\aim\oose\dea\datasource\mapper\TrackMapper.class
 nl\han\aim\oose\dea\resource\PlaylistResource$TracksResponse.class
 nl\han\aim\oose\dea\resource\LoginResource.class
-nl\han\aim\oose\dea\service\dto\login\LoginTokenDTO.class
 nl\han\aim\oose\dea\resource\PlaylistResource.class
+nl\han\aim\oose\dea\service\dto\LoginTokenDTO.class
 nl\han\aim\oose\dea\service\dto\TrackDTO.class
 nl\han\aim\oose\dea\service\dto\PlaylistsResponseDTO.class
 nl\han\aim\oose\dea\datasource\mapper\PlaylistMapper.class

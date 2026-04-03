@@ -4,7 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import nl.han.aim.oose.dea.datasource.databaseconnection.IDatabaseConnector;
 import nl.han.aim.oose.dea.datasource.mapper.LoginResponseMapper;
-import nl.han.aim.oose.dea.service.dto.login.LoginTokenDTO;
+import nl.han.aim.oose.dea.service.dto.LoginTokenDTO;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -15,13 +15,17 @@ public class LoginDao {
     private Logger logger = Logger.getLogger(getClass().getName());
     private IDatabaseConnector databaseConnector;
     @Inject
-    private LoginResponseMapper loginResponseMapper;
+    LoginResponseMapper loginResponseMapper;
 
     public LoginDao() {}
 
     @Inject
     public void setDatabaseConnector(IDatabaseConnector databaseConnector) {
         this.databaseConnector = databaseConnector;
+    }
+
+    public void setLoginResponseMapper(LoginResponseMapper loginResponseMapper) {
+        this.loginResponseMapper = loginResponseMapper;
     }
 
     public LoginTokenDTO checkUser(String username, String password) {
