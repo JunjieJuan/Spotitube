@@ -60,8 +60,8 @@ public class PlaylistDao {
                 }
             }
 
-<span class="fc" id="L63">        } catch (SQLException e) {</span>
-<span class="fc" id="L64">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
+<span class="nc" id="L63">        } catch (SQLException e) {</span>
+<span class="nc" id="L64">            logger.log(Level.SEVERE, &quot;Error communicating with database&quot;, e);</span>
 <span class="fc" id="L65">        }</span>
 
 <span class="fc" id="L67">        return new PlaylistsResponseDTO(playlists, totalLength);</span>
