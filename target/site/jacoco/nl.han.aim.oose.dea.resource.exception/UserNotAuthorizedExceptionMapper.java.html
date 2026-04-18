@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserNotAuthorizedExceptionMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spotitube</a> &gt; <a href="index.source.html" class="el_package">nl.han.aim.oose.dea.resource.exception</a> &gt; <span class="el_source">UserNotAuthorizedExceptionMapper.java</span></div><h1>UserNotAuthorizedExceptionMapper.java</h1><pre class="source lang-java linenums">package nl.han.aim.oose.dea.resource.exception;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+import nl.han.aim.oose.dea.service.exception.UserNotAuthorizedException;
+
+@Provider
+@ApplicationScoped
+<span class="nc" id="L12">public class UserNotAuthorizedExceptionMapper implements ExceptionMapper&lt;UserNotAuthorizedException&gt; {</span>
+
+    @Override
+    public Response toResponse(UserNotAuthorizedException exception) {
+<span class="nc" id="L16">        return Response</span>
+<span class="nc" id="L17">                .status(Response.Status.UNAUTHORIZED)</span>
+<span class="nc" id="L18">                .entity(&quot;{\&quot;error\&quot;: \&quot;Ongeldige gebruikersnaam of wachtwoord\&quot;}&quot;)</span>
+<span class="nc" id="L19">                .type(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L20">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

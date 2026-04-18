@@ -23,3 +23,4 @@ Spotitube,nl.han.aim.oose.dea.service.exception,UserNotAuthorizedException,0,4,0
 Spotitube,nl.han.aim.oose.dea.service,PlaylistService,0,31,0,0,0,7,0,6,0,6
 Spotitube,nl.han.aim.oose.dea.service,LoginService,0,15,0,0,0,4,0,3,0,3
 Spotitube,nl.han.aim.oose.dea.service,TrackService,0,29,0,0,0,7,0,6,0,6
+Spotitube,nl.han.aim.oose.dea.resource.exception,UserNotAuthorizedExceptionMapper,11,0,0,0,6,0,2,0,2,0
